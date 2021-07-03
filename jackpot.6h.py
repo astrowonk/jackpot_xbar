@@ -1,4 +1,4 @@
-#!/usr/local/opt/miniforge3/bin/python
+#!/usr/local/bin/python3
 
 # <bitbar.title>Jackpot</bitbar.title>
 # <bitbar.version>v1.0</bitbar.version>
