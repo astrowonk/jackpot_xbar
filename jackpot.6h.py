@@ -4,7 +4,7 @@
 # <bitbar.version>v1.0</bitbar.version>
 # <bitbar.author>Marcos</bitbar.author>
 # <xbar.author.github>astrowonk</xbar.author.github>
-# <bitbar.desc>Retrieves current lotto jackpots.</bitbar.desc>
+# <bitbar.desc>Retrieves current Mega Millions and Powerball jackpots.</bitbar.desc>
 # <bitbar.dependencies>python,requests</bitbar.dependencies>
 # <bitbar.abouturl>https://github.com/astrowonk/jackpot_xbar</bitbar.abouturl>
 
