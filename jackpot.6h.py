@@ -6,7 +6,7 @@
 # <xbar.author.github>astrowonk</xbar.author.github>
 # <bitbar.desc>Retrieves current lotto jackpots.</bitbar.desc>
 # <bitbar.dependencies>python,requests</bitbar.dependencies>
-# <bitbar.abouturl>http://marcoshuerta.com/</bitbar.abouturl>
+# <bitbar.abouturl>https://github.com/astrowonk/jackpot_xbar</bitbar.abouturl>
 
 import requests
 import json
