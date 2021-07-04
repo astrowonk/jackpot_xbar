@@ -59,17 +59,15 @@ class Jackpot():
     def handle_color(self):
 
         #handle colors - make things green if prize is big
-        if self.mega_json['Jackpot']['NextPrizePool'] > 200E6:
+        if self.mega_json['Jackpot']['NextPrizePool'] >= 200E6:
             self.mega_color = 'green'
 
         mapping_dict = {'Million': 1E6, "Billion": 1E9}
         out = self.pb_json['field_prize_amount'].split()
         pb_float_value = float(out[0].replace('$', '')) * mapping_dict[out[1]]
 
-        if pb_float_value > 200E6:
+        if pb_float_value >= 200E6:
             self.pb_color = 'green'
-        else:
-            self.pb_color = 'black'
 
         if 'green' in [self.mega_color, self.pb_color]:
             self.symbol_color = 'green'
