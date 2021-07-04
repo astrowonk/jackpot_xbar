@@ -71,8 +71,6 @@ class Jackpot():
 
         if 'green' in [self.mega_color, self.pb_color]:
             self.symbol_color = 'green'
-        else:
-            self.symbol_color = 'black'
 
     def generate_menu(self):
         pb_str = self.pb_json['field_prize_amount'].replace(
