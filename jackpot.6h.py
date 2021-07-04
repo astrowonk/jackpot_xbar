@@ -18,6 +18,7 @@ class Jackpot():
     mega_color = 'black'
     pb_color = 'black'
     symbol_color = 'black'
+    pb_float_value = None
 
     def __init__(self) -> None:
         self.load_data()
@@ -64,18 +65,24 @@ class Jackpot():
 
         mapping_dict = {'Million': 1E6, "Billion": 1E9}
         out = self.pb_json['field_prize_amount'].split()
-        pb_float_value = float(out[0].replace('$', '')) * mapping_dict[out[1]]
+        self.pb_float_value = float(out[0].replace('$',
+                                                   '')) * mapping_dict[out[1]]
 
-        if pb_float_value >= 200E6:
+        if self.pb_float_value >= 200E6:
             self.pb_color = 'green'
 
         if 'green' in [self.mega_color, self.pb_color]:
             self.symbol_color = 'green'
 
+    @staticmethod
+    def format_float(prize):
+        if (bil_prize := prize / 1E9) > 1:
+            return f"${bil_prize:.1f}B"
+        return f"${(prize / 1E6):.1f}M"
+
     def generate_menu(self):
-        pb_str = self.pb_json['field_prize_amount'].replace(
-            'Million', 'M').replace(' ', '').replace('Billion', 'B')
-        mm_str = f"${(self.mega_json['Jackpot']['NextPrizePool'] / 1E6):.1f}M"
+        pb_str = self.format_float(self.pb_float_value)
+        mm_str = self.format_float(self.mega_json['Jackpot']['NextPrizePool'])
 
         #generate menus
         print(
