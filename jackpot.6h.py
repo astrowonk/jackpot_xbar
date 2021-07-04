@@ -10,6 +10,24 @@
 
 import requests
 import json
+import datetime
+
+
+def get_weekday(day):
+    days = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
+    return days.index(day) + 1
+
+
+def get_next_dayofweek_datetime(dayofweek):
+    date_time = datetime.datetime.now().date()
+    start_time_w = date_time.isoweekday()
+    target_w = get_weekday(dayofweek)
+    if start_time_w < target_w:
+        day_diff = target_w - start_time_w
+    else:
+        day_diff = 7 - (start_time_w - target_w)
+
+    return date_time + datetime.timedelta(days=day_diff)
 
 
 class Jackpot():
@@ -88,8 +106,17 @@ class Jackpot():
         print(
             f":dollarsign.circle.fill: | size=13 sfcolor={self.symbol_color}")
         print('---')
-        print(f"MM: {mm_str} | size=12 color={self.mega_color}")
-        print(f"PB: {pb_str} | size=12 color={self.pb_color}")
+        print(
+            f"MM: {mm_str}, {self.get_next_drawing_date(['tue','fri'])} | size=12 color={self.mega_color}"
+        )
+        print(
+            f"PB: {pb_str}, {self.get_next_drawing_date(['wed','sat'])} | size=12 color={self.pb_color}"
+        )
+
+    @staticmethod
+    def get_next_drawing_date(list_of_weekdays):
+        dates = [get_next_dayofweek_datetime(x) for x in list_of_weekdays]
+        return min(dates).strftime("%a %b %d")
 
 
 if __name__ == "__main__":
