@@ -22,7 +22,7 @@ def get_next_dayofweek_datetime(dayofweek):
     date_time = datetime.datetime.now().date()
     start_time_w = date_time.isoweekday()
     target_w = get_weekday(dayofweek)
-    if start_time_w < target_w:
+    if start_time_w <= target_w:
         day_diff = target_w - start_time_w
     else:
         day_diff = 7 - (start_time_w - target_w)
@@ -93,10 +93,14 @@ class Jackpot():
             self.symbol_color = 'green'
 
     @staticmethod
-    def format_float(prize):
-        if (bil_prize := prize / 1E9) > 1:
-            return f"${bil_prize:.1f}B"
-        return f"${(prize / 1E6):.1f}M"
+    def format_float(value):
+        """Format float as a string with B for billion and M for million"""
+        if value >= 1E9:
+            return f"{value / 1E9:.1f}B"
+        elif value >= 1E6:
+            return f"{value / 1E6:.1f}M"
+        else:
+            return f"{value / 1E3:.1f}K"
 
     def generate_menu(self):
         pb_str = self.format_float(self.pb_float_value)
