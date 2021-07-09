@@ -111,10 +111,10 @@ class Jackpot():
             f":dollarsign.circle.fill: | size=13 sfcolor={self.symbol_color}")
         print('---')
         print(
-            f"MM: {mm_str}, {self.get_next_drawing_date(['tue','fri'])} | size=12 color={self.mega_color}"
+            f"MM: {mm_str}, {self.get_next_drawing_date(['tue','fri'])} | size=12 color={self.mega_color} href = 'https://www.megamillions.com"
         )
         print(
-            f"PB: {pb_str}, {self.get_next_drawing_date(['wed','sat'])} | size=12 color={self.pb_color}"
+            f"PB: {pb_str}, {self.get_next_drawing_date(['wed','sat'])} | size=12 color={self.pb_color} href='https://www.powerball.com"
         )
 
     @staticmethod
