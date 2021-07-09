@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+#!/usr/bin/env python3
 
 # <bitbar.title>Jackpot</bitbar.title>
 # <bitbar.version>v1.0</bitbar.version>
