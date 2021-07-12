@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 
 # <bitbar.title>Jackpot</bitbar.title>
-# <bitbar.version>v1.0</bitbar.version>
+# <bitbar.version>v1.1</bitbar.version>
 # <bitbar.author>Marcos</bitbar.author>
 # <bitbar.author.github>astrowonk</bitabar.author.github>
 # <bitbar.desc>Retrieves current Mega Millions and Powerball jackpots.</bitbar.desc>
-# <bitbar.dependencies>python,requests</bitbar.dependencies>
+# <bitbar.dependencies>python</bitbar.dependencies>
 # <bitbar.abouturl>https://github.com/astrowonk/jackpot_xbar</bitbar.abouturl>
 
-import requests
 import gzip
 from http import client
 import json
