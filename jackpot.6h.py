@@ -9,6 +9,8 @@
 # <bitbar.abouturl>https://github.com/astrowonk/jackpot_xbar</bitbar.abouturl>
 
 import requests
+import gzip
+from http import client
 import json
 import datetime
 
@@ -45,9 +47,8 @@ class Jackpot():
     def load_data(self):
         """Load data from endpoints, store to properties"""
         #load data
-        url = "https://www.megamillions.com/cmspages/utilservice.asmx/GetLatestDrawData"
-
-        payload = {}
+        conn = client.HTTPSConnection("www.megamillions.com")
+        payload = ''
         headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -57,23 +58,21 @@ class Jackpot():
             'Origin': 'https://www.megamillions.com',
             'Connection': 'keep-alive',
             'Referer': 'https://www.megamillions.com/',
-            'X-Requested-With': 'XMLHttpRequest',
+            'X-Requested-With': 'XMLHttpRequest'
         }
+        conn.request("POST", "/cmspages/utilservice.asmx/GetLatestDrawData",
+                     payload, headers)
+        response = conn.getresponse().read()
+        self.mega_json = json.loads(json.loads(gzip.decompress(response))['d'])
 
-        response = requests.request("POST", url, headers=headers, data=payload)
-
-        self.mega_json = json.loads(response.json()['d'])
-
-        url2 = "https://www.powerball.com/api/v1/estimates/powerball?_format=json"
-
-        payload = {}
+        conn = client.HTTPSConnection("www.powerball.com")
+        payload = ''
         headers = {}
+        conn.request("GET", "/api/v1/estimates/powerball?_format=json",
+                     payload, headers)
+        response2 = conn.getresponse().read()
 
-        response2 = requests.request("GET",
-                                     url2,
-                                     headers=headers,
-                                     data=payload)
-        self.pb_json = response2.json()[0]
+        self.pb_json = json.loads(response2)[0]
 
     def handle_color(self):
 
