@@ -50,7 +50,7 @@ class Jackpot():
         if environ.get('SWIFTBAR'):
             self.icon_row = f":dollarsign.circle.fill: | size=13 | sfcolor={self.symbol_color}"
         else:
-            self.icon_row = f"$ | size=14 | font=SF-Pro-Bold color={self.symbol_color}"
+            self.icon_row = f" $ | size=13 | font='Copperplate Gothic Bold' color={self.symbol_color}"
 
     def load_data(self):
         """Load data from endpoints, store to properties"""
