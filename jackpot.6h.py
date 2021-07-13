@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
-# <bitbar.title>Jackpot</bitbar.title>
-# <bitbar.version>v1.1</bitbar.version>
-# <bitbar.author>Marcos</bitbar.author>
-# <bitbar.author.github>astrowonk</bitabar.author.github>
-# <bitbar.desc>Retrieves current Mega Millions and Powerball jackpots.</bitbar.desc>
-# <bitbar.dependencies>python</bitbar.dependencies>
-# <bitbar.abouturl>https://github.com/astrowonk/jackpot_xbar</bitbar.abouturl>
+# <xbar.title>Jackpot</xbar.title>
+# <xbar.version>v1.1</xbar.version>
+# <xbar.author>Marcos</xbar.author>
+# <xbar.author.github>astrowonk</bitabar.author.github>
+# <xbar.desc>Retrieves current Mega Millions and Powerball jackpots.</xbar.desc>
+# <xbar.dependencies>python</xbar.dependencies>
+# <xbar.abouturl>https://github.com/astrowonk/jackpot_xbar</xbar.abouturl>
 
 import gzip
 from http import client
