@@ -12,6 +12,7 @@ import gzip
 from http import client
 import json
 import datetime
+from os import environ
 
 
 def get_weekday(day):
@@ -38,10 +39,18 @@ class Jackpot():
     pb_color = 'black'
     symbol_color = 'black'
     pb_float_value = None
+    icon_row = None
 
     def __init__(self) -> None:
         self.load_data()
         self.handle_color()
+        self.set_icon()
+
+    def set_icon(self):
+        if environ.get('SWIFTBAR'):
+            self.icon_row = f":dollarsign.circle.fill: | size=13 | sfcolor={self.symbol_color}"
+        else:
+            self.icon_row = f"$ | size=14 | font=SF-Pro-Bold color={self.symbol_color}"
 
     def load_data(self):
         """Load data from endpoints, store to properties"""
@@ -105,8 +114,7 @@ class Jackpot():
         mm_str = self.format_float(self.mega_json['Jackpot']['NextPrizePool'])
 
         #generate menus
-        print(
-            f":dollarsign.circle.fill: | size=13 sfcolor={self.symbol_color}")
+        print(self.icon_row)
         print('---')
         print(
             f"MM: {mm_str}, {self.get_next_drawing_date(['tue','fri'])} | size=12 color={self.mega_color} href=https://www.megamillions.com"
