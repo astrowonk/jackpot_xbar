@@ -34,6 +34,7 @@ def get_next_dayofweek_datetime(dayofweek):
 
 
 class Jackpot():
+    """Class that loads lottery jackpot data and generates text for xbar and swiftbar"""
     mega_json = None
     pb_json = None
     mega_color = 'black'
@@ -43,7 +44,9 @@ class Jackpot():
     icon_row = None
 
     def __init__(self, load_data=None) -> None:
-        """take tuple for fake data"""
+        """optionally can take tuple for fake data for testing on the command line and to avoid downloading from the internet.
+        Otherwise loads data and figures out the next drawing date and color"""
+
         if not load_data:
             self.load_data()
         else:
@@ -52,14 +55,16 @@ class Jackpot():
         self.set_icon()
 
     def set_icon(self):
+        """Swiftbar can use SF Symbols, xbar can not (yet)"""
         if environ.get('SWIFTBAR'):
             self.icon_row = f":dollarsign.circle.fill: | size=13 | sfcolor={self.symbol_color}"
         else:
             self.icon_row = f" $ | size=13 | font='Copperplate Gothic Bold' color={self.symbol_color}"
 
     def load_data(self):
-        """Load data from endpoints, store to properties"""
-        #load data
+        """Load data from endpoints, store to properties. Using http.client because I want to avoid any dependencies
+        though requests is a lot easier/nicer."""
+
         conn = client.HTTPSConnection("www.megamillions.com")
         payload = ''
         headers = {
