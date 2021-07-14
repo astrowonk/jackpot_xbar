@@ -3,8 +3,8 @@
 # <xbar.title>Jackpot</xbar.title>
 # <xbar.version>v1.1</xbar.version>
 # <xbar.author>Marcos</xbar.author>
-# <xbar.author.github>astrowonk</bitabar.author.github>
-# <xbar.desc>Retrieves current Mega Millions and Powerball jackpots.</xbar.desc>
+# <xbar.author.github>astrowonk</xbar.author.github>
+# <xbar.desc>Displays current Mega Millions and Powerball jackpots.</xbar.desc>
 # <xbar.dependencies>python</xbar.dependencies>
 # <xbar.abouturl>https://github.com/astrowonk/jackpot_xbar</xbar.abouturl>
 
