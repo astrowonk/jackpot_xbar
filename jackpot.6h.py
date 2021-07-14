@@ -13,6 +13,7 @@ from http import client
 import json
 import datetime
 from os import environ
+import argparse
 
 
 def get_weekday(day):
@@ -41,8 +42,12 @@ class Jackpot():
     pb_float_value = None
     icon_row = None
 
-    def __init__(self) -> None:
-        self.load_data()
+    def __init__(self, load_data=None) -> None:
+        """take tuple for fake data"""
+        if not load_data:
+            self.load_data()
+        else:
+            self.pb_float_value, self.mega_float_value = load_data
         self.handle_color()
         self.set_icon()
 
@@ -72,6 +77,7 @@ class Jackpot():
                      payload, headers)
         response = conn.getresponse().read()
         self.mega_json = json.loads(json.loads(gzip.decompress(response))['d'])
+        self.mega_float_value = self.mega_json['Jackpot']['NextPrizePool']
 
         conn = client.HTTPSConnection("www.powerball.com")
         payload = ''
@@ -81,17 +87,16 @@ class Jackpot():
         response2 = conn.getresponse().read()
 
         self.pb_json = json.loads(response2)[0]
-
-    def handle_color(self):
-
-        #handle colors - make things green if prize is big
-        if self.mega_json['Jackpot']['NextPrizePool'] >= 200E6:
-            self.mega_color = 'green'
-
         mapping_dict = {'Million': 1E6, "Billion": 1E9}
         out = self.pb_json['field_prize_amount'].split()
         self.pb_float_value = float(out[0].replace('$',
                                                    '')) * mapping_dict[out[1]]
+
+    def handle_color(self):
+        """Make things green if prize is large"""
+
+        if self.mega_float_value >= 200E6:
+            self.mega_color = 'green'
 
         if self.pb_float_value >= 200E6:
             self.pb_color = 'green'
@@ -103,24 +108,24 @@ class Jackpot():
     def format_float(value):
         """Format float as a string with B for billion and M for million"""
         if value >= 1E9:
-            return f"{value / 1E9:.1f}B"
+            return f"${value / 1E9:.2f}B"
         elif value >= 1E6:
-            return f"{value / 1E6:.1f}M"
+            return f"${value / 1E6:.1f}M"
         else:
-            return f"{value / 1E3:.1f}K"
+            return f"${value / 1E3:.1f}K"
 
     def generate_menu(self):
         pb_str = self.format_float(self.pb_float_value)
-        mm_str = self.format_float(self.mega_json['Jackpot']['NextPrizePool'])
+        mm_str = self.format_float(self.mega_float_value)
 
         #generate menus
         print(self.icon_row)
         print('---')
         print(
-            f"MM: {mm_str}, {self.get_next_drawing_date(['tue','fri'])} | size=12 color={self.mega_color} href=https://www.megamillions.com"
+            f"MM: {mm_str: >7} - {self.get_next_drawing_date(['tue','fri'])} | font='Menlo' | size=18 | color={self.mega_color} href=https://www.megamillions.com"
         )
         print(
-            f"PB: {pb_str}, {self.get_next_drawing_date(['wed','sat'])} | size=12 color={self.pb_color} href=https://www.powerball.com"
+            f"PB: {pb_str: >7} - {self.get_next_drawing_date(['wed','sat'])} | font='Menlo' | size=18 | color={self.pb_color} href=https://www.powerball.com"
         )
 
     @staticmethod
@@ -130,4 +135,12 @@ class Jackpot():
 
 
 if __name__ == "__main__":
-    Jackpot().generate_menu()
+    parser = argparse.ArgumentParser(description='Get Jackpot info')
+    parser.add_argument('--data',
+                        type=int,
+                        nargs='+',
+                        action='extend',
+                        default=None)
+    args = parser.parse_args()
+    print(tuple(args.data))
+    Jackpot(load_data=tuple(args.data)).generate_menu()
