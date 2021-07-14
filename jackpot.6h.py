@@ -142,5 +142,4 @@ if __name__ == "__main__":
                         action='extend',
                         default=None)
     args = parser.parse_args()
-    print(tuple(args.data))
-    Jackpot(load_data=tuple(args.data)).generate_menu()
+    Jackpot(load_data=args.data).generate_menu()
