@@ -123,10 +123,16 @@ class Jackpot():
         pb_str = self.format_float(self.pb_float_value)
         mm_str = self.format_float(self.mega_float_value)
         json_dict = {
-            'mm':
-            f"{mm_str: >7} - {self.get_next_drawing_date(['tue','fri'])}",
-            'pb':
-            f"PB: {pb_str: >7} - {self.get_next_drawing_date(['wed','sat'])}"
+            'mm': {
+                'jackpot_float': self.mega_float_value,
+                'jackpot_str': f"{mm_str: >7}",
+                'next_date': self.get_next_drawing_date(['tue', 'fri'])
+            },
+            'pb': {
+                'jackpot_float': self.pb_float_value,
+                'jackpot_str': f"{pb_str: >7}",
+                'next_date': self.get_next_drawing_date(['wed', 'sat'])
+            }
         }
         print(json.dumps(json_dict, indent=4))
 
