@@ -119,6 +119,17 @@ class Jackpot():
         else:
             return f"${value / 1E3:.1f}K"
 
+    def print_json(self):
+        pb_str = self.format_float(self.pb_float_value)
+        mm_str = self.format_float(self.mega_float_value)
+        json_dict = {
+            'mm':
+            f"{mm_str: >7} - {self.get_next_drawing_date(['tue','fri'])}",
+            'pb':
+            f"PB: {pb_str: >7} - {self.get_next_drawing_date(['wed','sat'])}"
+        }
+        print(json.dumps(json_dict, indent=4))
+
     def generate_menu(self):
         pb_str = self.format_float(self.pb_float_value)
         mm_str = self.format_float(self.mega_float_value)
@@ -146,5 +157,9 @@ if __name__ == "__main__":
                         nargs='+',
                         action='extend',
                         default=None)
+    parser.add_argument('--output-json', action='store_true', default=False)
     args = parser.parse_args()
-    Jackpot(load_data=args.data).generate_menu()
+    if not args.output_json:
+        Jackpot(load_data=args.data).generate_menu()
+    else:
+        Jackpot(load_data=args.data).print_json()
