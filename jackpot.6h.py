@@ -144,10 +144,10 @@ class Jackpot():
         print(self.icon_row)
         print('---')
         print(
-            f"MM: {mm_str: >7} - {self.get_next_drawing_date(['tue','fri'])} | font='Menlo' | size=18 | color={self.mega_color} href=https://www.megamillions.com"
+            f"MM: {mm_str: >7} - {self.get_next_drawing_date(['tue','fri'])} | font='Menlo' | size=13 | color={self.mega_color} href=https://www.megamillions.com"
         )
         print(
-            f"PB: {pb_str: >7} - {self.get_next_drawing_date(['wed','sat'])} | font='Menlo' | size=18 | color={self.pb_color} href=https://www.powerball.com"
+            f"PB: {pb_str: >7} - {self.get_next_drawing_date(['wed','sat'])} | font='Menlo' | size=13 | color={self.pb_color} href=https://www.powerball.com"
         )
 
     @staticmethod
