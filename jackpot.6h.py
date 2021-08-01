@@ -56,7 +56,7 @@ class Jackpot():
 
     def set_icon(self):
         """Swiftbar can use SF Symbols, xbar can not (yet)"""
-        if environ.get('SWIFTBAR'):
+        if environ.get('SWIFTBAR') and float(environ.get('OS_VERSION_MAJOR')) >= 11:
             self.icon_row = f":dollarsign.circle.fill: | size=13 sfcolor={self.symbol_color}"
         else:
             self.icon_row = f" $ | size=13 | font='Copperplate Gothic Bold' color={self.symbol_color}"
