@@ -46,7 +46,8 @@ class Jackpot():
     def __init__(self, load_data=None) -> None:
         """optionally can take tuple for fake data for testing on the command line and to avoid downloading from the internet.
         Otherwise loads data and figures out the next drawing date and color"""
-
+        self.pb_json = {}
+        self.mega_json = {}
         if not load_data:
             self.load_data()
         else:
@@ -56,7 +57,8 @@ class Jackpot():
 
     def set_icon(self):
         """Swiftbar can use SF Symbols, xbar can not (yet)"""
-        if environ.get('SWIFTBAR') and float(environ.get('OS_VERSION_MAJOR')) >= 11:
+        if environ.get('SWIFTBAR') and float(
+                environ.get('OS_VERSION_MAJOR')) >= 11:
             self.icon_row = f":dollarsign.circle.fill: | size=13 sfcolor={self.symbol_color}"
         else:
             self.icon_row = f" $ | size=13 | font='Copperplate Gothic Bold' color={self.symbol_color}"
@@ -147,13 +149,22 @@ class Jackpot():
             f"MM: {mm_str: >7} - {self.get_next_drawing_date(['tue','fri'])} | font='Menlo' size=13 color={self.mega_color} href=https://www.megamillions.com"
         )
         print(
-            f"PB: {pb_str: >7} - {self.get_next_drawing_date(['wed','sat'])} | font='Menlo' size=13 color={self.pb_color}  href=https://www.powerball.com"
+            f"PB: {pb_str: >7} - {self.get_powerball_date()} | font='Menlo' size=13 color={self.pb_color}  href=https://www.powerball.com"
         )
 
     @staticmethod
     def get_next_drawing_date(list_of_weekdays):
         dates = [get_next_dayofweek_datetime(x) for x in list_of_weekdays]
         return min(dates).strftime("%a %b %d")
+
+    def get_powerball_date(self):
+        try:
+            d = datetime.datetime.strptime(
+                self.pb_json.get('field_next_draw-date'), "%Y-%m-%dT%H:%M:%S")
+            d = d.replace(tzinfo=datetime.timezone.utc)
+            return d.astimezone().strftime('%a %b %d')
+        except TypeError:
+            return self.get_next_drawing_date(['wed', 'sat'])
 
 
 if __name__ == "__main__":
