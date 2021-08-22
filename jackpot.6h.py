@@ -124,7 +124,9 @@ class Jackpot():
     @staticmethod
     def format_float(value):
         """Format float as a string with B for billion and M for million"""
-        if value >= 1E9:
+        if value == 0:
+            return "No Data"
+        elif value >= 1E9:
             return f"${value / 1E9:.2f}B"
         elif value >= 1E6:
             return f"${value / 1E6:.1f}M"
