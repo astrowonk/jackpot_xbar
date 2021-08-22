@@ -67,7 +67,7 @@ class Jackpot():
         """Load data from endpoints, store to properties. Using http.client because I want to avoid any dependencies
         though requests is a lot easier/nicer."""
 
-        conn = client.HTTPSConnection("www.megamillions.com")
+        conn = client.HTTPSConnection("www.megamillions.com", timeout=5)
         payload = ''
         headers = {
             'Content-Type': 'application/json',
@@ -80,24 +80,34 @@ class Jackpot():
             'Referer': 'https://www.megamillions.com/',
             'X-Requested-With': 'XMLHttpRequest'
         }
-        conn.request("POST", "/cmspages/utilservice.asmx/GetLatestDrawData",
-                     payload, headers)
-        response = conn.getresponse().read()
-        self.mega_json = json.loads(json.loads(gzip.decompress(response))['d'])
-        self.mega_float_value = self.mega_json['Jackpot']['NextPrizePool']
+        try:
+            conn.request("POST",
+                         "/cmspages/utilservice.asmx/GetLatestDrawData",
+                         payload, headers)
+            response = conn.getresponse().read()
+            self.mega_json = json.loads(
+                json.loads(gzip.decompress(response))['d'])
+            self.mega_float_value = self.mega_json['Jackpot']['NextPrizePool']
+        except:
+            self.mega_json = {}
+            self.mega_float_value = 0
 
-        conn = client.HTTPSConnection("www.powerball.com")
+        conn = client.HTTPSConnection("www.powerball.com", timeout=5)
         payload = ''
         headers = {}
-        conn.request("GET", "/api/v1/estimates/powerball?_format=json",
-                     payload, headers)
-        response2 = conn.getresponse().read()
+        try:
+            conn.request("GET", "/api/v1/estimates/powerball?_format=json",
+                         payload, headers)
+            response2 = conn.getresponse().read()
 
-        self.pb_json = json.loads(response2)[0]
-        mapping_dict = {'Million': 1E6, "Billion": 1E9}
-        out = self.pb_json['field_prize_amount'].split()
-        self.pb_float_value = float(out[0].replace('$',
-                                                   '')) * mapping_dict[out[1]]
+            self.pb_json = json.loads(response2)[0]
+            mapping_dict = {'Million': 1E6, "Billion": 1E9}
+            out = self.pb_json['field_prize_amount'].split()
+            self.pb_float_value = float(out[0].replace(
+                '$', '')) * mapping_dict[out[1]]
+        except:
+            self.pb_float_value = 0
+            self.pb_json = {}
 
     def handle_color(self):
         """Make things green if prize is large"""
