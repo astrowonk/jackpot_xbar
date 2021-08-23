@@ -176,7 +176,7 @@ class Jackpot():
             d = d.replace(tzinfo=datetime.timezone.utc)
             return d.astimezone().strftime('%a %b %d')
         except TypeError:
-            return self.get_next_drawing_date(['wed', 'sat'])
+            return self.get_next_drawing_date(['mon', 'wed', 'sat'])
 
 
 if __name__ == "__main__":
