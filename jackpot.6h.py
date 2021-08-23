@@ -145,7 +145,7 @@ class Jackpot():
             'pb': {
                 'jackpot_float': self.pb_float_value,
                 'jackpot_str': f"{pb_str: >7}",
-                'next_date': self.get_next_drawing_date(['wed', 'sat'])
+                'next_date': self.get_powerball_date()
             }
         }
         print(json.dumps(json_dict, indent=4))
@@ -172,7 +172,7 @@ class Jackpot():
     def get_powerball_date(self):
         try:
             d = datetime.datetime.strptime(
-                self.pb_json.get('field_next_draw-date'), "%Y-%m-%dT%H:%M:%S")
+                self.pb_json.get('field_next_draw_date'), "%Y-%m-%dT%H:%M:%S")
             d = d.replace(tzinfo=datetime.timezone.utc)
             return d.astimezone().strftime('%a %b %d')
         except TypeError:
