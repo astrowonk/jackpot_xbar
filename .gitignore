@@ -1,2 +1,4 @@
 jackpot_dev.ipynb
 .ipynb_checkpoints/*
+jackpot.py
+__pycache__/*
