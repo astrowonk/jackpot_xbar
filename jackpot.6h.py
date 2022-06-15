@@ -73,12 +73,15 @@ class Jackpot():
             'Content-Type': 'application/json',
             'Accept': 'application/json, text/javascript, */*; q=0.01',
             'Accept-Encoding': 'gzip, deflate, br',
-            'Accept-Language': 'en-us',
+            'Accept-Language': 'en-US,en;q=0.9',
             'Host': 'www.megamillions.com',
             'Origin': 'https://www.megamillions.com',
+            'Content-Length': '0',
             'Connection': 'keep-alive',
+            'User-Agent':
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.5 Safari/605.1.15',
             'Referer': 'https://www.megamillions.com/',
-            'X-Requested-With': 'XMLHttpRequest'
+            'X-Requested-With': 'XMLHttpRequest',
         }
         try:
             conn.request("POST",
