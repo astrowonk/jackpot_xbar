@@ -9,3 +9,4 @@ This is a simple extension which will show Mega Millions and Powerball Jackpot s
 
 Requires python 3.6+. I have removed the dependency on requests and am using http.client directly. Should work with any python installation. (Why does Postman auto-generate http.client code and not urllib btw?)
 
+I use this with the excellent [Swiftbar](https://github.com/swiftbar/SwiftBar), but it should work with bitbar and xbar as well (though not as tested).
