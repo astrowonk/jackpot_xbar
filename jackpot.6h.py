@@ -15,6 +15,7 @@ import datetime
 from os import environ
 import argparse
 
+JACKPOT_THRESHOLD = 200E6
 
 def get_weekday(day):
     days = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
@@ -115,10 +116,10 @@ class Jackpot():
     def handle_color(self):
         """Make things green if prize is large"""
 
-        if self.mega_float_value >= 200E6:
+        if self.mega_float_value >= JACKPOT_THRESHOLD:
             self.mega_color = 'green'
 
-        if self.pb_float_value >= 200E6:
+        if self.pb_float_value >= JACKPOT_THRESHOLD:
             self.pb_color = 'green'
 
         if 'green' in [self.mega_color, self.pb_color]:
