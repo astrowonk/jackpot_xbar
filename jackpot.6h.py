@@ -7,6 +7,7 @@
 # <xbar.desc>Displays current Mega Millions and Powerball jackpots.</xbar.desc>
 # <xbar.dependencies>python</xbar.dependencies>
 # <xbar.abouturl>https://github.com/astrowonk/jackpot_xbar</xbar.abouturl>
+# <xbar.image>https://user-images.githubusercontent.com/13702392/215283698-5f5f16aa-7ed2-4325-b006-879e4dbe9ae9.png</xbar.image>
 
 import gzip
 from http import client
@@ -16,6 +17,7 @@ from os import environ
 import argparse
 
 JACKPOT_THRESHOLD = 200E6
+
 
 def get_weekday(day):
     days = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
