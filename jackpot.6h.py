@@ -43,7 +43,7 @@ class Jackpot():
     mega_color = 'black'
     pb_color = 'black'
     symbol_color = 'black'
-    pb_float_value = None
+    pb_float_value = 0
     icon_row = None
 
     def __init__(self, load_data=None) -> None:
@@ -98,22 +98,32 @@ class Jackpot():
             self.mega_json = {}
             self.mega_float_value = 0
 
-        conn = client.HTTPSConnection("www.powerball.com", timeout=5)
+        conn = client.HTTPSConnection("www.valottery.com")
         payload = ''
-        headers = {}
+        headers = {
+            'Accept': '*/*',
+            'Connection': 'keep-alive',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Host': 'www.valottery.com',
+            'User-Agent':
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Safari/605.1.15',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Referer': 'https://www.valottery.com/',
+            'X-Requested-With': 'XMLHttpRequest',
+        }
         try:
-            conn.request("GET", "/api/v1/estimates/powerball?_format=json",
-                         payload, headers)
+            conn.request("GET", "/api/v1/drawgames/20/nextdrawing", payload,
+                         headers)
             response2 = conn.getresponse().read()
 
-            self.pb_json = json.loads(response2)[0]
-            mapping_dict = {'Million': 1E6, "Billion": 1E9}
-            out = self.pb_json['field_prize_amount'].split()
+            self.pb_json = json.loads(gzip.decompress(response2))['data']
+            mapping_dict = {'MILLION': 1E6, "BILLION": 1E9}
+            out = self.pb_json['nextDrawing']['nextJackpotAmount'].split()
             self.pb_float_value = float(out[0].replace(
                 '$', '')) * mapping_dict[out[1]]
         except:
-            self.pb_float_value = 0
             self.pb_json = {}
+            self.pb_float_value = 0
 
     def handle_color(self):
         """Make things green if prize is large"""
@@ -178,9 +188,8 @@ class Jackpot():
     def get_powerball_date(self):
         try:
             d = datetime.datetime.strptime(
-                self.pb_json.get('field_next_draw_date'), "%Y-%m-%dT%H:%M:%S")
-            d = d.replace(tzinfo=datetime.timezone.utc)
-            return d.astimezone().strftime('%a %b %d')
+                self.pb_json['nextDrawing']['nextDrawingDate'], "%a %m/%d/%Y")
+            return d.strftime('%a %b %d')
         except TypeError:
             return self.get_next_drawing_date(['mon', 'wed', 'sat'])
 
