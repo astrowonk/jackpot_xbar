@@ -16,11 +16,11 @@ import datetime
 from os import environ
 import argparse
 
-JACKPOT_THRESHOLD = 200E6
+JACKPOT_THRESHOLD = 200e6
 
 
 def get_weekday(day):
-    days = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
+    days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
     return days.index(day) + 1
 
 
@@ -36,8 +36,9 @@ def get_next_dayofweek_datetime(dayofweek):
     return date_time + datetime.timedelta(days=day_diff)
 
 
-class Jackpot():
+class Jackpot:
     """Class that loads lottery jackpot data and generates text for xbar and swiftbar"""
+
     mega_json = None
     pb_json = None
     mega_color = 'black'
@@ -60,67 +61,63 @@ class Jackpot():
 
     def set_icon(self):
         """Swiftbar can use SF Symbols, xbar can not (yet)"""
-        if environ.get('SWIFTBAR') and float(
-                environ.get('OS_VERSION_MAJOR')) >= 11:
-            self.icon_row = f":dollarsign.circle.fill: | size=13 sfcolor={self.symbol_color}"
+        if environ.get('SWIFTBAR') and float(environ.get('OS_VERSION_MAJOR')) >= 11:
+            self.icon_row = f':dollarsign.circle.fill: | size=13 sfcolor={self.symbol_color}'
         else:
-            self.icon_row = f" $ | size=13 | font='Copperplate Gothic Bold' color={self.symbol_color}"
+            self.icon_row = (
+                f" $ | size=13 | font='Copperplate Gothic Bold' color={self.symbol_color}"
+            )
 
     def load_data(self):
         """Load data from endpoints, store to properties. Using http.client because I want to avoid any dependencies
         though requests is a lot easier/nicer."""
 
-        conn = client.HTTPSConnection("www.megamillions.com", timeout=5)
+        conn = client.HTTPSConnection('www.megamillions.com', timeout=5)
         payload = ''
         headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json, text/javascript, */*; q=0.01',
-            'Accept-Encoding': 'gzip, deflate, br',
+            # 'Accept-Encoding': 'gzip, deflate, br',
             'Accept-Language': 'en-US,en;q=0.9',
             'Host': 'www.megamillions.com',
             'Origin': 'https://www.megamillions.com',
             'Content-Length': '0',
             'Connection': 'keep-alive',
-            'User-Agent':
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.5 Safari/605.1.15',
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.5 Safari/605.1.15',
             'Referer': 'https://www.megamillions.com/',
             'X-Requested-With': 'XMLHttpRequest',
         }
         try:
-            conn.request("POST",
-                         "/cmspages/utilservice.asmx/GetLatestDrawData",
-                         payload, headers)
+            conn.request(
+                'POST', '/cmspages/utilservice.asmx/GetLatestDrawData', payload, headers
+            )
             response = conn.getresponse().read()
-            self.mega_json = json.loads(
-                json.loads(gzip.decompress(response))['d'])
+            self.mega_json = json.loads(json.loads(response)['d'])
             self.mega_float_value = self.mega_json['Jackpot']['NextPrizePool']
         except:
             self.mega_json = {}
             self.mega_float_value = 0
 
-        conn = client.HTTPSConnection("www.valottery.com")
+        conn = client.HTTPSConnection('www.valottery.com')
         payload = ''
         headers = {
             'Accept': '*/*',
             'Connection': 'keep-alive',
             'Accept-Encoding': 'gzip, deflate, br',
             'Host': 'www.valottery.com',
-            'User-Agent':
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Safari/605.1.15',
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Safari/605.1.15',
             'Accept-Language': 'en-US,en;q=0.9',
             'Referer': 'https://www.valottery.com/',
             'X-Requested-With': 'XMLHttpRequest',
         }
         try:
-            conn.request("GET", "/api/v1/drawgames/20/nextdrawing", payload,
-                         headers)
+            conn.request('GET', '/api/v1/drawgames/20/nextdrawing', payload, headers)
             response2 = conn.getresponse().read()
 
             self.pb_json = json.loads(gzip.decompress(response2))['data']
-            mapping_dict = {'MILLION': 1E6, "BILLION": 1E9}
+            mapping_dict = {'MILLION': 1e6, 'BILLION': 1e9}
             out = self.pb_json['nextDrawing']['nextJackpotAmount'].split()
-            self.pb_float_value = float(out[0].replace(
-                '$', '')) * mapping_dict[out[1]]
+            self.pb_float_value = float(out[0].replace('$', '')) * mapping_dict[out[1]]
         except:
             self.pb_json = {}
             self.pb_float_value = 0
@@ -141,13 +138,13 @@ class Jackpot():
     def format_float(value):
         """Format float as a string with B for billion and M for million"""
         if value == 0:
-            return "No Data"
-        elif value >= 1E9:
-            return f"${value / 1E9:.2f}B"
-        elif value >= 1E6:
-            return f"${value / 1E6:.1f}M"
+            return 'No Data'
+        elif value >= 1e9:
+            return f'${value / 1E9:.2f}B'
+        elif value >= 1e6:
+            return f'${value / 1E6:.1f}M'
         else:
-            return f"${value / 1E3:.1f}K"
+            return f'${value / 1E3:.1f}K'
 
     def print_json(self):
         pb_str = self.format_float(self.pb_float_value)
@@ -155,14 +152,14 @@ class Jackpot():
         json_dict = {
             'mm': {
                 'jackpot_float': self.mega_float_value,
-                'jackpot_str': f"{mm_str: >7}",
-                'next_date': self.get_next_drawing_date(['tue', 'fri'])
+                'jackpot_str': f'{mm_str: >7}',
+                'next_date': self.get_next_drawing_date(['tue', 'fri']),
             },
             'pb': {
                 'jackpot_float': self.pb_float_value,
-                'jackpot_str': f"{pb_str: >7}",
-                'next_date': self.get_powerball_date()
-            }
+                'jackpot_str': f'{pb_str: >7}',
+                'next_date': self.get_powerball_date(),
+            },
         }
         print(json.dumps(json_dict, indent=4))
 
@@ -170,7 +167,7 @@ class Jackpot():
         pb_str = self.format_float(self.pb_float_value)
         mm_str = self.format_float(self.mega_float_value)
 
-        #generate menus
+        # generate menus
         print(self.icon_row)
         print('---')
         print(
@@ -183,24 +180,21 @@ class Jackpot():
     @staticmethod
     def get_next_drawing_date(list_of_weekdays):
         dates = [get_next_dayofweek_datetime(x) for x in list_of_weekdays]
-        return min(dates).strftime("%a %b %d")
+        return min(dates).strftime('%a %b %d')
 
     def get_powerball_date(self):
         try:
             d = datetime.datetime.strptime(
-                self.pb_json['nextDrawing']['nextDrawingDate'], "%a %m/%d/%Y")
+                self.pb_json['nextDrawing']['nextDrawingDate'], '%a %m/%d/%Y'
+            )
             return d.strftime('%a %b %d')
         except TypeError:
             return self.get_next_drawing_date(['mon', 'wed', 'sat'])
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Get Jackpot info')
-    parser.add_argument('--data',
-                        type=int,
-                        nargs='+',
-                        action='extend',
-                        default=None)
+    parser.add_argument('--data', type=int, nargs='+', action='extend', default=None)
     parser.add_argument('--output-json', action='store_true', default=False)
     args = parser.parse_args()
     if not args.output_json:
